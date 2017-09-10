@@ -57,7 +57,9 @@ function getCurrentTabUrl(callback) {
 function getImageUrl(searchTerm, callback, errorCallback) {
   // Google image search - 100 searches per day.
   // https://developers.google.com/image-search/
-  var searchUrl = 'https://ajax.googleapis.com/ajax/services/search/images' +
+
+  // Kenny: this provided API link is DEPRECATED. The extension won't work because of it!
+  var searchUrl = 'https://developers.google.com/custom-search/json-api/v1/using_rest' +
     '?v=1.0&q=' + encodeURIComponent(searchTerm);
   var x = new XMLHttpRequest();
   x.open('GET', searchUrl);
