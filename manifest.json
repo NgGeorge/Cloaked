@@ -1,21 +1,22 @@
 {
   "manifest_version": 2,
 
-  "name": "Getting started example (to be Cloaked)",
-  "description": "This extension shows a Google Image search result for the current page",
+
+  "name": "Cloaked!",
+  "description": "This extension hides all Destiny 2 spoilers.",
   "version": "1.0",
 
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html",
-    "default_title": "Click here!"
+    "default_title": "Cloaked"
   },
   "content_scripts": [ {
     "js" : ["ext/jquery.min.js", "cloaked.js"],
     "matches": [ "http://*/*", "https://*/*"]
      }],
   "permissions": [
-    "activeTab",
-    "https://ajax.googleapis.com/"
+    "http://*/*", 
+    "https://*/*"
   ]
 }
