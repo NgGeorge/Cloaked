@@ -15,12 +15,7 @@
   
   "content_scripts": [ {
     "js" : ["ext/jquery.min.js", "cloaked.js"],
-    "matches": [ "http://*/*", "https://*/*"],
-    "run_at": "document_end"
-  }],
-
-  "permissions": [
-    "*://*/*"
-  ]
+    "matches": ["<all_urls>"]
+  }]
   
 }
