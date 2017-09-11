@@ -11,6 +11,10 @@
     "default_title": "Cloaked"
   },
   
+  "permissions": [
+    "storage"
+  ],
+  
   "content_scripts": [ {
     "js" : ["ext/jquery.min.js", "cloaked.js"],
     "matches": [ "http://*/*", "https://*/*"]

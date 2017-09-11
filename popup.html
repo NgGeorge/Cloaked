@@ -5,22 +5,19 @@
  value "popup.html".
  -->
 <html>
-  <head>
-    <title>Cloaked</title>
-    <style>
-      body {
-        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-        font-size: 100%;
-      }
-      #status {
-        /* avoid an excessively wide status text */
-        white-space: pre;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        max-width: 400px;
-      }
-    </style>
 
+<head>
+    <title>Destiny 2 Spoiler Hider</title>
+    <style>
+        body {
+            font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+            font-size: 100%;
+        }
+        
+        .search-found {
+            text-decoration: underline;
+        }
+    </style>
     <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
@@ -28,10 +25,17 @@
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
     <script src="ext/jquery.min.js"></script>
-    <!-- <script src="popup.js"></script> -->
     <script src="cloaked.js"></script>
-  </head>
-  <body>
-  </body>
-</html>
+</head>
 
+<body>
+    <div id="form">
+        <label>Input</label>
+        <input type="text" id="block-item">
+        <input id="submit-button" type="submit" value="submit">
+    </div>
+    <div id="listView"></div>
+    <input id="clear-button" type="submit" value="clear">
+</body>
+
+</html>
