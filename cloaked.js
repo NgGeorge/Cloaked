@@ -105,11 +105,8 @@ function saveSpoilerList() {
     });
 }
 
-<<<<<<< HEAD
-=======
 // Case insensitive jquery contains
 jQuery.expr[':'].icontains = function(a, i, m) {
     return jQuery(a).text().toUpperCase()
             .indexOf(m[3].toUpperCase()) >= 0;
 };
->>>>>>> 29f9b4440924c2eeb8e64f4f0107aa7d10410b28
