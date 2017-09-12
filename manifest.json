@@ -13,6 +13,10 @@
   },
 
   
+  "permissions": [
+    "storage"
+  ],
+  
   "content_scripts": [ {
     "js" : ["ext/jquery.min.js", "cloaked.js"],
     "matches": ["<all_urls>"]
