@@ -52,18 +52,19 @@ $(function () {
         searchForSpoilers();
     });
 
+        searchForSpoilers();
     // New up an observer, and tell it what to do when it successfully observes.
     // Necessary for Facebooks "neverending" scrolling
-    var observer = new MutationObserver(function (mutations, observer) {
+   /* var observer = new MutationObserver(function (mutations, observer) {
         // fired when a mutation occurs
         searchForSpoilers();
-    });
+    });*/
 
     // This part establishes what needs to be watched, and starts the watching
-    observer.observe($('[id^=topnews_main_stream_]').get(0), {
+    /*observer.observe($('[id^=topnews_main_stream_]').get(0), {
         subtree: true, // watches target and it's descendants
         attributes: true // watches targets attributes
-    });
+    });*/
 });
 
 
@@ -86,10 +87,10 @@ function searchForSpoilers() {
     if (spoilerList["spoilerItem"] != null) {
         var searchString = '';
         spoilerList["spoilerItem"].forEach(function (item) {
-            searchString = searchString + "p:contains('" + item + "'), ";
+            searchString = searchString + "*:icontains('" + item + "'), ";
         });
         searchString = searchString.substring(0, searchString.length - 2);
-        $(searchString).parents('.userContentWrapper').css('-webkit-filter', 'blur(5px)');
+        $(searchString).parent().css('-webkit-filter', 'blur(5px)');
     }
 }
 
@@ -104,3 +105,11 @@ function saveSpoilerList() {
     });
 }
 
+<<<<<<< HEAD
+=======
+// Case insensitive jquery contains
+jQuery.expr[':'].icontains = function(a, i, m) {
+    return jQuery(a).text().toUpperCase()
+            .indexOf(m[3].toUpperCase()) >= 0;
+};
+>>>>>>> 29f9b4440924c2eeb8e64f4f0107aa7d10410b28
