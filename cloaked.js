@@ -1,5 +1,9 @@
 var spoilerList;
 
+// Disables browser action popup
+// chrome.browserACtion.disable(null);
+// chrome.browserAction.setPopup({popup: ""});
+
 // Look in storage sync for an object called 'spoilerItem'
 chrome.storage.sync.get("spoilerItem", function (results) {
     spoilerList = results;
