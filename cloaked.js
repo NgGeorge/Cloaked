@@ -1,5 +1,6 @@
 var spoilerList;
 
+
 // Look in storage sync for an object called 'spoilerItem'
 chrome.storage.sync.get("spoilerItem", function (results) {
     spoilerList = results;
