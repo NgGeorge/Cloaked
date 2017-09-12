@@ -87,7 +87,11 @@ function searchForSpoilers() {
             searchString = searchString + "*:icontains('" + item + "'), ";
         });
         searchString = searchString.substring(0, searchString.length - 2);
-        $(searchString).parent().css('-webkit-filter', 'blur(5px)');
+        
+        $(searchString).parent().css('-webkit-filter', 'blur(5px)').click(function() {
+            $(this).css('-webkit-filter', '');
+        });
+
     }
 }
 
