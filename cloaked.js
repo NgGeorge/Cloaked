@@ -1,17 +1,5 @@
 var spoilerList = { 'spoilerItem': ['destiny', 'warlock', 'hunter', 'titan', 'bungie']};
 
-/* Look in storage sync for an object called 'spoilerItem'
-chrome.storage.sync.get("spoilerItem", function (results) {
-    spoilerList = results;
-    if (spoilerList['spoilerItem'] == null) {
-        spoilerList = {
-            'spoilerItem': []
-        };
-        saveSpoilerList();
-    }
-});
-*/
-
 
 // Listeners to listen when the page loads
 $(function () {
@@ -28,32 +16,9 @@ $(function () {
         searchForSpoilers();
     });
 
-    /* Clear Button onclick removes all spoilers from list
-    $('#clear-button').click(function (evt) {
-        spoilerList = {
-            'spoilerItem': []
-        };
-        saveSpoilerList();
-        $('#block-item').val('');
-        updateListView();
-        searchForSpoilers();
-    }); */
-
-    // When a spoilerListItem gets clicked, remove it from the list
-    /*
-    $(document).on('click', '.spoilerListItem', function (item) {
-        $('p:contains(' + item.currentTarget.innerHTML + ')').parents('.userContentWrapper').css('-webkit-filter', '');
-        spoilerList["spoilerItem"].splice($.inArray(item.currentTarget.innerHTML, spoilerList["spoilerItem"]), 1);
-        saveSpoilerList();
-        updateListView();
-        searchForSpoilers();
-    });
-    */
-
-        searchForSpoilers();
     // New up an observer, and tell it what to do when it successfully observes.
     // Necessary for Facebooks "neverending" scrolling
-   /* var observer = new MutationObserver(function (mutations, observer) {
+    /* var observer = new MutationObserver(function (mutations, observer) {
         // fired when a mutation occurs
         searchForSpoilers();
     });*/
@@ -94,17 +59,6 @@ function searchForSpoilers() {
     }
 }
 
-/* Sets spoilerList to chrome sync storage
-function saveSpoilerList() {
-    chrome.storage.sync.set({
-        'spoilerItem': spoilerList["spoilerItem"]
-    }, function (result) {
-        if (chrome.runtime.error) {
-            console.log(chrome.runtime.error);
-        }
-    });
-}
-*/
 
 // Case insensitive jquery contains
 jQuery.expr[':'].icontains = function(a, i, m) {
