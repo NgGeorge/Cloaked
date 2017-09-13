@@ -1,6 +1,5 @@
 var spoilerList = { 'spoilerItem': ['destiny', 'warlock', 'hunter', 'titan', 'bungie']};
 
-
 // Listeners to listen when the page loads
 $(function () {
 //    updateListView();
