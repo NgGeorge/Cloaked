@@ -17,18 +17,33 @@ $(function () {
     });
 
     if (window.location.href.indexOf("facebook") > -1) {
+
+      // For Facebook Feeds
       // New up an observer, and tell it what to do when it successfully observes.
       // Necessary for Facebooks "neverending" scrolling
       var observer = new MutationObserver(function (mutations, observer) {
           // fired when a mutation occurs
-          blockFacebookSpoilers();
+          blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
+          blockFacebookSpoilers("[class^=_4-u2]");
       });
 
+      var feed = $('[id^=topnews_main_stream_]').get(0);
+      if (feed) {
+        observer.observe(feed, {
+            subtree: true, // watches target and it's descendants
+            attributes: true // watches targets attributes
+        });
+      }
+
+      var page = $('[id^=pagelet_timeline]').get(0);
       // This part establishes what needs to be watched, and starts the watching
-      observer.observe($('[id^=topnews_main_stream_]').get(0), {
-          subtree: true, // watches target and it's descendants
-          attributes: true // watches targets attributes
-      });
+      if (page) {
+        observer.observe(page, {
+            subtree: true, // watches target and it's descendants
+            attributes: true // watches targets attributes
+        });
+      }
+
     }
 });
 
@@ -54,14 +69,14 @@ function searchForSpoilers() {
         var searchString = '';
         spoilerList["spoilerItem"].forEach(function (item) {
 
-        searchString = searchString + "p:icontains('" + item + "'), h1:icontains('" + item + "'), h2:icontains('" + item + "'), li:icontains('" + item + "'), img[src*='" + item + "'], source[src*='" + item + "'], ";
+        searchString = searchString + "p:icontains('" + item + "'), h1:icontains('" + item + "'), h2:icontains('" + item + "'), li:icontains('" + item + "'), span:icontains('" + item + "'), img[src*='" + item + "'], source[src*='" + item + "'], ";
         });
         searchString = searchString.substring(0, searchString.length - 2);
         $(searchString).parent(":not('body')", ":not('head')").css('-webkit-filter', 'blur(5px)');
     }
 }
 
-function blockFacebookSpoilers() {
+function blockFacebookSpoilers(blockElement) {
     if (spoilerList["spoilerItem"] != null) {
         var searchString = '';
         spoilerList["spoilerItem"].forEach(function (item) {
@@ -69,7 +84,7 @@ function blockFacebookSpoilers() {
           searchString = searchString + "p:icontains('" + item + "'), span:icontains('" + item + "'), ";
         });
         searchString = searchString.substring(0, searchString.length - 2);
-        $(searchString).parents("[id^=hyperfeed_story_id_]").css('-webkit-filter', 'blur(5px)');
+        $(searchString).parents(blockElement).css('-webkit-filter', 'blur(5px)');
     }
 
 }
