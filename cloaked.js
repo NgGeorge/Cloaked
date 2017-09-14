@@ -1,4 +1,4 @@
-var spoilerList = { 'spoilerItem': ['dota', 'warlock', 'hunter', 'titan', 'bungie']};
+var spoilerList = { 'spoilerItem': ['destiny', 'dota', 'warlock', 'hunter', 'titan', 'bungie']};
 
 // Listeners to listen when the page loads
 $(function () {
@@ -63,7 +63,7 @@ function searchForSpoilers() {
         // });
 
         $(searchString).parent(":not('body')", ":not('head')").css('-webkit-filter', 'blur(5px)');
-        // $(searchString).wrap("<div class='overlay'></div>").after("<div class=")
+        $(searchString).wrap("<div class='overlay'></div>").after("<div class='spoilerWarning'>Warning!</div>");
     }
 }
 
@@ -84,4 +84,3 @@ jQuery.expr[':'].icontains = function(a, i, m) {
     return jQuery(a).text().toUpperCase()
             .indexOf(m[3].toUpperCase()) >= 0;
 };
-    //github.com/NgGeorge/Cloaked/issues/9/ "default_popup": "popup.html",
