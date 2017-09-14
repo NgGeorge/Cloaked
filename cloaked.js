@@ -88,10 +88,13 @@ function searchForSpoilers() {
         });
         searchString = searchString.substring(0, searchString.length - 2);
         
-        // TODO: .wrap() this spoiler element with the appropriate CSS, like blur.
-        $(searchString).parent().css('-webkit-filter', 'blur(5px)').click(function() {
-            $(this).css('-webkit-filter', '');
-        });
+        // $(searchString).parent().css('-webkit-filter', 'blur(5px)').click(function() {
+        //     $(this).css('-webkit-filter', '');
+        // });
+
+        // $(searchString).wrap("<div></div>").parent().css('-webkit-filter', 'blur(5px)');
+
+        $(searchString).wrap("<div></div>");
     }
 }
 
