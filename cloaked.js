@@ -62,7 +62,7 @@ function searchForSpoilers() {
         //     $(this).css('-webkit-filter', '');
         // });
 
-        $(searchString).parent(":not('body')", ":not('head')").css('-webkit-filter', 'blur(5px)');
+        $(searchString).parent(":not('body')", ":not('head')", ":not('.spoilerWarning')").css('-webkit-filter', 'blur(5px)');
         $(searchString).wrap("<div class='overlay'></div>").after("<div class='spoilerWarning'>Warning!</div>");
     }
 }
