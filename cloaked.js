@@ -18,16 +18,22 @@ $(function () {
 
     if (window.location.href.indexOf("facebook") > -1) {
 
+      var feed = $('[id^=topnews_main_stream_]').get(0);
+      var page = $('[id^=pagelet_timeline]').get(0);
+
       // For Facebook Feeds
       // New up an observer, and tell it what to do when it successfully observes.
       // Necessary for Facebooks "neverending" scrolling
       var observer = new MutationObserver(function (mutations, observer) {
           // fired when a mutation occurs
-          blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
-          blockFacebookSpoilers("[class^=_4-u2]");
+
+          if (feed) {
+            blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
+          } else {
+            blockFacebookSpoilers("[class^=_4-u2]");
+          }
       });
 
-      var feed = $('[id^=topnews_main_stream_]').get(0);
       if (feed) {
         observer.observe(feed, {
             subtree: true, // watches target and it's descendants
@@ -35,7 +41,6 @@ $(function () {
         });
       }
 
-      var page = $('[id^=pagelet_timeline]').get(0);
       // This part establishes what needs to be watched, and starts the watching
       if (page) {
         observer.observe(page, {
