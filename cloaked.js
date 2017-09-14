@@ -29,7 +29,8 @@ $(function () {
 
           if (feed) {
             blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
-          } else {
+          } 
+          if (page) {
             blockFacebookSpoilers("[class^=_4-u2]");
           }
       });
