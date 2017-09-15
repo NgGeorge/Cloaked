@@ -1,4 +1,4 @@
-var spoilerList = { 'spoilerItem': ['destiny', 'dota', 'warlock', 'hunter', 'titan', 'bungie']};
+var spoilerList = { 'spoilerItem': ['dota', 'warlock', 'hunter', 'titan', 'bungie']};
 
 // Listeners to listen when the page loads
 $(function () {
@@ -56,14 +56,21 @@ function searchForSpoilers() {
         });
         searchString = searchString.substring(0, searchString.length - 2);
 
-        // TODO: Wrap and apply CSS for hover overlay effect:
+        // Blur the spoiler's parent (excluding body+head) because it's important to block the spoiler's surrounding terms.
+        $(searchString).parent(":not('body')", ":not('head')").css('-webkit-filter', 'blur(5px)').click(function() {
+            $(this).css('-webkit-filter', '');
+        });
 
-        // $(searchString).wrap("<div></div>").parent(":not('body')", ":not('head')").css('-webkit-filter', 'blur(5px)').click(function() {
+        // $(searchString).wrap("<div class='overlay'></div>").after("<div class='spoilerWarning'>Warning!</div>").click(function() {
         //     $(this).css('-webkit-filter', '');
         // });
 
-        $(searchString).parent(":not('body')", ":not('head')", ":not('.spoilerWarning')").css('-webkit-filter', 'blur(5px)');
-        $(searchString).wrap("<div class='overlay'></div>").after("<div class='spoilerWarning'>Warning!</div>");
+        // $(searchString).parent(":not('body')", ":not('head')", ":not('.spoilerWarning')").css('-webkit-filter', 'blur(5px)');
+
+        /*
+        <div class='overlay'>
+        make the spioler etxt absolute 
+        */
     }
 }
 
