@@ -47,6 +47,7 @@ $(function () {
             });
         }
 
+        
         // [feed, page].forEach(function(element) {
         //     observer.observe(element, {
         //         subtree: true, // watches target and it's descendants
