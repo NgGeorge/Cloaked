@@ -17,6 +17,8 @@ $(function () {
         searchForSpoilers();
     });
 
+    // TODO?: probably should disconnect() the observers when we're "done" to avoid performance overhead
+    // TODO: refactor the if check to a general if check, then wrap the Facebook-specific code into its own function.
     if (window.location.href.indexOf("facebook") > -1) {
 
       var feed = $('[id^=topnews_main_stream_]').get(0);
@@ -29,6 +31,7 @@ $(function () {
           // fired when a mutation occurs
 	count++;
 
+        // TODO: 4 is a heuristic; encapsulate
           if (feed && (count % 4 == 0)) {
 console.log("TRUE");
             blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
@@ -40,6 +43,7 @@ console.log("FALSE");
 	// Will need to put in a check for _401d feed and _307z posts
       });
 
+      // TODO: enforce DRY by using a function for these parallel structures (if(feed)... and if(page)...)
       if (feed) {
         observer.observe(feed, {
             subtree: true, // watches target and it's descendants
@@ -54,25 +58,8 @@ console.log("FALSE");
             attributes: true // watches targets attributes
         });
       }
-
     }
 });
-
-
-
-/* Handles showing the list of terms in the extention popup
-function updateListView() {
-    if (spoilerList["spoilerItem"] != null) {
-        $('#listView').empty();
-        var html = '<ul>';
-        for (var i = 0; i < spoilerList['spoilerItem'].length; i++) {
-            html += '<li><a class="spoilerListItem" href="#">' + spoilerList['spoilerItem'][i] + '</a></li>';
-        }
-        html += '</ul>';
-        $('#listView').append(html);
-    }
-}
-*/
 
 // Handles searching for spoilers
 function searchForSpoilers() {
@@ -97,7 +84,6 @@ function blockFacebookSpoilers(blockElement) {
         searchString = searchString.substring(0, searchString.length - 2);
         $(searchString).parents(blockElement).css('-webkit-filter', 'blur(5px)');
     }
-
 }
 
 // This function checks if the title includes any of the terms, if it does, then it will block all the images and videos on the page - just incase.
@@ -111,10 +97,24 @@ function checkTitle() {
   }
 }
 
-
 // Case insensitive jquery contains
 jQuery.expr[':'].icontains = function(a, i, m) {
     return jQuery(a).text().toUpperCase()
             .indexOf(m[3].toUpperCase()) >= 0;
 };
     //github.com/NgGeorge/Cloaked/issues/9/ "default_popup": "popup.html",
+
+
+/* Handles showing the list of terms in the extention popup
+function updateListView() {
+    if (spoilerList["spoilerItem"] != null) {
+        $('#listView').empty();
+        var html = '<ul>';
+        for (var i = 0; i < spoilerList['spoilerItem'].length; i++) {
+            html += '<li><a class="spoilerListItem" href="#">' + spoilerList['spoilerItem'][i] + '</a></li>';
+        }
+        html += '</ul>';
+        $('#listView').append(html);
+    }
+}
+*/
