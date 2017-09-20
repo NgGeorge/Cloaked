@@ -7,17 +7,6 @@ $(function () {
     searchForSpoilers();
     checkTitle();
 
-    // Submit Button onclick adds item in input to list
-    $('#submit-button').click(function (evt) {
-        itemToAdd = $('#block-item').val().toLowerCase();
-        spoilerList['spoilerItem'].push(itemToAdd);
-        saveSpoilerList();
-        $('#block-item').val('');
-        updateListView();
-        searchForSpoilers();
-    });
-
-    // TODO?: probably should disconnect() the observers when we're "done" to avoid performance overhead
     // TODO: refactor the if check to a general if check, then wrap the Facebook-specific code into its own function.
 
     if (window.location.href.indexOf("facebook") > -1) {
@@ -102,20 +91,4 @@ jQuery.expr[':'].icontains = function(a, i, m) {
             .indexOf(m[3].toUpperCase()) >= 0;
 };
 
-    //github.com/NgGeorge/Cloaked/issues/9/ "default_popup": "popup.html",
-
-
-/* Handles showing the list of terms in the extention popup
-function updateListView() {
-    if (spoilerList["spoilerItem"] != null) {
-        $('#listView').empty();
-        var html = '<ul>';
-        for (var i = 0; i < spoilerList['spoilerItem'].length; i++) {
-            html += '<li><a class="spoilerListItem" href="#">' + spoilerList['spoilerItem'][i] + '</a></li>';
-        }
-        html += '</ul>';
-        $('#listView').append(html);
-    }
-}
-*/
 
