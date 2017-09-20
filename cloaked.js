@@ -1,4 +1,4 @@
-var spoilerList = { 'spoilerItem': ['destiny', 'warlock', 'hunter', 'titan', 'bungie']};
+var spoilerList = { 'spoilerItem': ['dota', 'warlock', 'hunter', 'titan', 'destiny2']};
 var count = 0;
 
 // Listeners to listen when the page loads
@@ -19,6 +19,7 @@ $(function () {
 
     // TODO?: probably should disconnect() the observers when we're "done" to avoid performance overhead
     // TODO: refactor the if check to a general if check, then wrap the Facebook-specific code into its own function.
+
     if (window.location.href.indexOf("facebook") > -1) {
 
       var feed = $('[id^=topnews_main_stream_]').get(0);
@@ -33,11 +34,9 @@ $(function () {
 
         // TODO: 4 is a heuristic; encapsulate
           if (feed && (count % 4 == 0)) {
-console.log("TRUE");
             blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
           } 
           if (page && (count % 4 == 0)) {
-console.log("FALSE");
             blockFacebookSpoilers("[class^=_4-u2]");
           }
 	// Will need to put in a check for _401d feed and _307z posts
@@ -102,6 +101,7 @@ jQuery.expr[':'].icontains = function(a, i, m) {
     return jQuery(a).text().toUpperCase()
             .indexOf(m[3].toUpperCase()) >= 0;
 };
+
     //github.com/NgGeorge/Cloaked/issues/9/ "default_popup": "popup.html",
 
 
@@ -118,3 +118,4 @@ function updateListView() {
     }
 }
 */
+
