@@ -1,4 +1,5 @@
 var spoilerList = { 'spoilerItem': ['destiny', 'warlock', 'hunter', 'titan', 'bungie']};
+var count = 0;
 
 // Listeners to listen when the page loads
 $(function () {
@@ -26,13 +27,17 @@ $(function () {
       // Necessary for Facebooks "neverending" scrolling
       var observer = new MutationObserver(function (mutations, observer) {
           // fired when a mutation occurs
+	count++;
 
-          if (feed) {
+          if (feed && (count % 4 == 0)) {
+console.log("TRUE");
             blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
           } 
-          if (page) {
+          if (page && (count % 4 == 0)) {
+console.log("FALSE");
             blockFacebookSpoilers("[class^=_4-u2]");
           }
+	// Will need to put in a check for _401d feed and _307z posts
       });
 
       if (feed) {
