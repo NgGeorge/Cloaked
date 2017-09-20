@@ -1,4 +1,4 @@
-var spoilerList = { 'spoilerItem': ['destiny', 'warlock', 'hunter', 'titan', 'bungie']};
+var spoilerList = { 'spoilerItem': ['dota', 'warlock', 'hunter', 'titan', 'destiny2']};
 var count = 0;
 
 // Listeners to listen when the page loads
@@ -6,16 +6,6 @@ $(function () {
 //    updateListView();
     searchForSpoilers();
     checkTitle();
-
-    // Submit Button onclick adds item in input to list
-    $('#submit-button').click(function (evt) {
-        itemToAdd = $('#block-item').val().toLowerCase();
-        spoilerList['spoilerItem'].push(itemToAdd);
-        saveSpoilerList();
-        $('#block-item').val('');
-        updateListView();
-        searchForSpoilers();
-    });
 
     if (window.location.href.indexOf("facebook") > -1) {
 
@@ -30,11 +20,9 @@ $(function () {
 	count++;
 
           if (feed && (count % 4 == 0)) {
-console.log("TRUE");
             blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
           } 
           if (page && (count % 4 == 0)) {
-console.log("FALSE");
             blockFacebookSpoilers("[class^=_4-u2]");
           }
 	// Will need to put in a check for _401d feed and _307z posts
@@ -57,22 +45,6 @@ console.log("FALSE");
 
     }
 });
-
-
-
-/* Handles showing the list of terms in the extention popup
-function updateListView() {
-    if (spoilerList["spoilerItem"] != null) {
-        $('#listView').empty();
-        var html = '<ul>';
-        for (var i = 0; i < spoilerList['spoilerItem'].length; i++) {
-            html += '<li><a class="spoilerListItem" href="#">' + spoilerList['spoilerItem'][i] + '</a></li>';
-        }
-        html += '</ul>';
-        $('#listView').append(html);
-    }
-}
-*/
 
 // Handles searching for spoilers
 function searchForSpoilers() {
@@ -117,4 +89,3 @@ jQuery.expr[':'].icontains = function(a, i, m) {
     return jQuery(a).text().toUpperCase()
             .indexOf(m[3].toUpperCase()) >= 0;
 };
-    //github.com/NgGeorge/Cloaked/issues/9/ "default_popup": "popup.html",
