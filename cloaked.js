@@ -1,5 +1,4 @@
 const SPOILER_LIST = ['dota', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
-const EVENT_COUNT = 0; 		// Number of events observed by an observer
 const FILTER_DELAY = 4; 	// Number of events that can observed before a filter should be applied
 
 $(function () {
@@ -19,21 +18,22 @@ function filterFacebook() {
 	// The target elements to watch for mutation
 	var feed = $('[id^=topnews_main_stream_]').get(0);
 	var page = $('[id^=pagelet_timeline]').get(0);
-	
+    var count = 0; 		// Number of events observed by an observer
+
 	// For Facebook Feeds
 	// Creates an observer, and tells it what to do when it successfully observes mutations
 	// Necessary for Facebooks "neverending" scrolling
 	var observer = new MutationObserver(function (mutations, observer) {
 		// fired when a mutation occurs
-		EVENT_COUNT++;
+		count++;
 		
 		// For user news feed
-		if (feed && (EVENT_COUNT % FILTER_DELAY === 0)) {
+		if (feed && (count % FILTER_DELAY === 0)) {
 			blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
 		}
 
 		// For page feeds
-		if (page && (EVENT_COUNT % FILTER_DELAY === 0)) {
+		if (page && (count % FILTER_DELAY === 0)) {
 			blockFacebookSpoilers("[class^=_4-u2]");
 		}
 
