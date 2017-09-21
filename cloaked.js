@@ -1,69 +1,69 @@
-var spoilerList = { 'spoilerItem': ['destiny', 'warlock', 'hunter', 'titan', 'destiny2']};
-var count = 0;
+const SPOILER_LIST = ['dota', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
+const EVENT_COUNT = 0; 		// Number of events observed by an observer
+const FILTER_DELAY = 4; 	// Number of events that can observed before a filter should be applied
 
-// Listeners to listen when the page loads
 $(function () {
-    //    updateListView();
+
+	// Filter through the entire page first
     searchForSpoilers();
     checkTitle();
     
-    // TODO: refactor the if check to a general if check, then wrap the Facebook-specific code into its own function.
-    
+	// Check if the current site is Facebook, then apply a filter that watches the mutating page feed if it is
     if (window.location.href.indexOf("facebook") > -1) {
-        
-        var feed = $('[id^=topnews_main_stream_]').get(0);
-        var page = $('[id^=pagelet_timeline]').get(0);
-        
-        // For Facebook Feeds
-        // New up an observer, and tell it what to do when it successfully observes.
-        // Necessary for Facebooks "neverending" scrolling
-        var observer = new MutationObserver(function (mutations, observer) {
-            // fired when a mutation occurs
-            count++;
-            
-            // TODO: 4 is a heuristic; encapsulate
-            if (feed && (count % 4 == 0)) {
-                blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
-            }
-            if (page && (count % 4 == 0)) {
-                blockFacebookSpoilers("[class^=_4-u2]");
-            }
-            // Will need to put in a check for _401d feed and _307z posts
-        });
-        
-        // TODO: enforce DRY by using a function for these parallel structures (if(feed)... and if(page)...)
-        if (feed) {
-            observer.observe(feed, {
-                subtree: true, // watches target and it's descendants
-                attributes: true // watches targets attributes
-            });
-        }
-        
-        // This part establishes what needs to be watched, and starts the watching
-        if (page) {
-            observer.observe(page, {
-                subtree: true, // watches target and it's descendants
-                attributes: true // watches targets attributes
-            });
-        }
-
-        
-        // [feed, page].forEach(function(element) {
-        //     observer.observe(element, {
-        //         subtree: true, // watches target and it's descendants
-        //         attributes: true // watches targets attributes
-        //     });
-        // });
-
-        // dosomething([feed, page]);
-    }
+		filterFacebook();
+	}
 });
 
-// Handles searching for spoilers
+// Create a filter that watches and dynamically filters Facebook
+function filterFacebook() { 
+	// The target elements to watch for mutation
+	var feed = $('[id^=topnews_main_stream_]').get(0);
+	var page = $('[id^=pagelet_timeline]').get(0);
+	
+	// For Facebook Feeds
+	// Creates an observer, and tells it what to do when it successfully observes mutations
+	// Necessary for Facebooks "neverending" scrolling
+	var observer = new MutationObserver(function (mutations, observer) {
+		// fired when a mutation occurs
+		EVENT_COUNT++;
+		
+		// For user news feed
+		if (feed && (EVENT_COUNT % FILTER_DELAY === 0)) {
+			blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
+		}
+
+		// For page feeds
+		if (page && (EVENT_COUNT % FILTER_DELAY === 0)) {
+			blockFacebookSpoilers("[class^=_4-u2]");
+		}
+
+		// Will potentially need to put in a check for _401d feed and _307z posts
+	});
+	
+	// Setup the observers to observe specific targets
+	if (feed) {
+		setupObserver(feed, observer);
+	}
+
+	if (page) {
+		setupObserver(page, observer);
+	}
+        
+}
+
+// Setup an observer for the given target element
+function setupObserver(target, observer) {
+	observer.observe(target, {
+		subtree: true, // watches target and it's descendants
+		attributes: true, // watches targets attributes
+	});
+}
+
+// This function applies the censor filters to the page based on the items in the spoiler list.
 function searchForSpoilers() {
-    if (spoilerList["spoilerItem"] != null) {
+    if (SPOILER_LIST != null) {
         var searchString = '';
-        spoilerList["spoilerItem"].forEach(function (item) {
+        SPOILER_LIST.forEach(function (item) {
             
             searchString = searchString + "p:icontains('" + item + "'), h1:icontains('" + item + "'), h2:icontains('" + item + "'), li:icontains('" + item + "'), span:icontains('" + item + "'), img[src*='" + item + "'], source[src*='" + item + "'], ";
         });
@@ -72,10 +72,13 @@ function searchForSpoilers() {
     }
 }
 
+// searchForSpoilers and blockFacebookSpoilers still need to be refactored into one function
+// TODO: move the static searchString terms into an array
+// TODO: figure out how how I can save parent strings with multiple selectors i.e. ":not('body')", ":not('head')" into a single variable
 function blockFacebookSpoilers(blockElement) {
-    if (spoilerList["spoilerItem"] != null) {
+    if (SPOILER_LIST != null) {
         var searchString = '';
-        spoilerList["spoilerItem"].forEach(function (item) {
+        SPOILER_LIST.forEach(function (item) {
             
             searchString = searchString + "p:icontains('" + item + "'), span:icontains('" + item + "'), ";
         });
@@ -87,8 +90,8 @@ function blockFacebookSpoilers(blockElement) {
 // This function checks if the title includes any of the terms, if it does, then it will block all the images and videos on the page - just incase.
 function checkTitle() {
     var title = $('title').text().toLowerCase();
-    for (var i = 0; i < spoilerList['spoilerItem'].length; i++) {
-        if (title.includes(spoilerList['spoilerItem'][i])) {
+    for (var i = 0; i < SPOILER_LIST.length; i++) {
+        if (title.includes(SPOILER_LIST[i])) {
             $('img, source').parent(":not('body')", ":not('head')").css('-webkit-filter', 'blur(5px)');
             break;
         }
