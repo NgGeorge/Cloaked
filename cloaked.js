@@ -55,7 +55,22 @@ function searchForSpoilers() {
         searchString = searchString + "p:icontains('" + item + "'), h1:icontains('" + item + "'), h2:icontains('" + item + "'),  h3:icontains('" + item + "'), h4:icontains('" + item + "'),  h5:icontains('" + item + "'), h6:icontains('" + item + "'), li:icontains('" + item + "'), img[src*='" + item + "'], source[src*='" + item + "'], ";
         });
         searchString = searchString.substring(0, searchString.length - 2);
-        $(searchString).parent(":not('body')", ":not('head')").css('-webkit-filter', 'blur(5px)');
+
+        // Blur the spoiler's parent (excluding body+head) because it's important to block the spoiler's surrounding terms.
+        $(searchString).parent(":not('body')", ":not('head')").css('-webkit-filter', 'blur(5px)').click(function() {
+            $(this).css('-webkit-filter', '');
+        });
+
+        // $(searchString).wrap("<div class='overlay'></div>").after("<div class='spoilerWarning'>Warning!</div>").click(function() {
+        //     $(this).css('-webkit-filter', '');
+        // });
+
+        // $(searchString).parent(":not('body')", ":not('head')", ":not('.spoilerWarning')").css('-webkit-filter', 'blur(5px)');
+
+        /*
+        <div class='overlay'>
+        make the spioler etxt absolute 
+        */
     }
 }
 
@@ -76,4 +91,3 @@ jQuery.expr[':'].icontains = function(a, i, m) {
     return jQuery(a).text().toUpperCase()
             .indexOf(m[3].toUpperCase()) >= 0;
 };
-    //github.com/NgGeorge/Cloaked/issues/9/ "default_popup": "popup.html",
