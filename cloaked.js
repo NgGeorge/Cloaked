@@ -74,6 +74,7 @@ function searchForSpoilers() {
             $(this).css('-webkit-filter', '');
         });
 
+	// TODO : Low Piority - Get the spoiler warning overlay working
         // $(searchString).wrap("<div class='overlay'></div>").after("<div class='spoilerWarning'>Warning!</div>").click(function() {
         //     $(this).css('-webkit-filter', '');
         // });
@@ -82,7 +83,7 @@ function searchForSpoilers() {
 
         /*
         <div class='overlay'>
-        make the spioler etxt absolute 
+        make the spoiler text absolute 
         */
     }
 }
