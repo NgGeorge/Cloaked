@@ -8,7 +8,7 @@ $(function () {
     checkTitle();
     
 	// Check if the current site is Facebook, then apply a filter that watches the mutating page feed if it is
-    if (window.location.href.indexOf("facebook") > -1) {
+    if (window.location.href.indexOf('facebook') > -1) {
 		filterFacebook();
 	}
 });
@@ -29,12 +29,12 @@ function filterFacebook() {
 		
 		// For user news feed
 		if (feed && (count % FILTER_DELAY === 0)) {
-			blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
+			blockFacebookSpoilers('[id^=hyperfeed_story_id_]');
 		}
 
 		// For page feeds
 		if (page && (count % FILTER_DELAY === 0)) {
-			blockFacebookSpoilers("[class^=_4-u2]");
+			blockFacebookSpoilers('[class^=_4-u2]');
 		}
 
 		// Will potentially need to put in a check for _401d feed and _307z posts
