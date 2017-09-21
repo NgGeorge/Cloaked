@@ -1,4 +1,4 @@
-const SPOILER_LIST = ['dota', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
+const SPOILER_LIST = ['destiny', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
 const FILTER_DELAY = 4; 	// Number of events that can observed before a filter should be applied
 
 $(function () {
