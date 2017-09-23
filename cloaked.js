@@ -2,6 +2,7 @@ var spoilerList = { 'spoilerItem': ['dota', 'warlock', 'hunter', 'titan', 'bungi
 
 // Listeners to listen when the page loads
 $(function () {
+
 //    updateListView();
     searchForSpoilers();
     checkTitle();
