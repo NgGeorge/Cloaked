@@ -17,8 +17,7 @@
   
   "content_scripts": [ {
     "js" : ["ext/jquery.min.js", "cloaked.js"],
-    "matches": ["<all_urls>"],
-    "css": ["styles.css"]
+    "matches": ["<all_urls>"]
   }],
 
   // Used for On/Off button
