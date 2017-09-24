@@ -1,5 +1,5 @@
 (function ($) {
-	const SPOILER_LIST = ['dota', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
+	const SPOILER_LIST = ['destiny', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
 	var obs_count = 0; 				// Number of events observed by an observer
 
 
