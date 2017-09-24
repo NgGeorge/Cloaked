@@ -2,7 +2,16 @@
 	const SPOILER_LIST = ['destiny', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
 	const FILTER_DELAY = 4; 	// Number of events that can observed before a filter should be applied
 
-	// Setup an observer for the given target element
+    var getEnabledState = function() {
+        // TODO: send a message to the event page asking for the state.
+        var enabledPort = chrome.runtime.connect({name: "enabled"});
+        enabledPort.postMessage({cmd: "getEnabledState"});
+        enabledPort.onMessage.addListener(function(msg) {
+            return msg;
+        });
+    }
+
+    // Setup an observer for the given target element
 	var setupObserver = function(target, observer) {
 		observer.observe(target, {
 			subtree: true, // watches target and it's descendants
@@ -107,15 +116,31 @@
 
 	// Run script
 	$(function () {
+        
 
-		// Filter through the entire page first
-		searchForSpoilers();
-		checkTitle();
-		
-		// Check if the current site is Facebook, then apply a filter that watches the mutating page feed if it is
-		if (window.location.href.indexOf("facebook") > -1) {
-			filterFacebook();
-		}
+        // TODO: setup the channel first.
+        var enabledPort = chrome.runtime.connect({name: "enabled"});
+        enabledPort.postMessage({cmd: "getEnabledState"});
+        enabledPort.onMessage.addListener(function(msg) {
+            // Adds logic to on/off button in popup.html
+            $('enabledButton').click(function() {
+                console.log("msg: " + msg);
+                console.log("!msg: " + !msg);
+                enabledPort.postMessage({cmd: "setEnabledState", data: !msg});
+            });
+
+
+            if (msg == true) {
+                // Filter through the entire page first
+                searchForSpoilers();
+                checkTitle();
+                
+                // Check if the current site is Facebook, then apply a filter that watches the mutating page feed if it is
+                if (window.location.href.indexOf("facebook") > -1) {
+                    filterFacebook();
+                }
+            }
+        });
 	});
 
 }(window.jQuery));
