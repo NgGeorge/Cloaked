@@ -1,5 +1,5 @@
 (function ($) {
-	const SPOILER_LIST = ['destiny', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
+	const SPOILER_LIST = ['destiny', 'traveler', 'cayde', 'ikora', 'calus', 'destiny2', 'leviathan', 'ghaul', 'bungie']; // Terms to be filtered on
 	var obs_count = 0; 				// Number of events observed by an observer
 
 
@@ -12,6 +12,7 @@
 			obs_count++;
 			
 			if (obs_count % filterDelay === 0) {
+				console.log("REACHED");
 
 				blockDynamicSpoilers(item);
 			}
@@ -78,7 +79,7 @@
 		
 		// Setup the observers to observe specific targets
 		if (feed) {
-			observer = createObserver(feedItem, 1);
+			observer = createObserver(feedItem, 3);
 			setupObserver(feed, observer);
 		}
 
