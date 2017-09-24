@@ -111,21 +111,14 @@
         // Setup communication with the background page, which persists the enabled state.
         var backgroundPort = chrome.runtime.connect({name: "enabled"});
         backgroundPort.postMessage({cmd: "getEnabledState"});
+        // Get the enabled state.
         backgroundPort.onMessage.addListener(function(response) {
-            // Adds logic to on/off button in popup.html
-            // TODO: encapsulate this in some modifiable function()
-            if (response == false) {
-                // $('#enabledLabel').text('Enable');
-                $('#enabledSwitch').attr('checked', null);
-            } else {
-                // $('#enabledLabel').text('Enabled');
-                $('#enabledSwitch').attr('checked', 'checked');
-            }
-            $('#enabledSwitch').click(function() {
+            
+
+            $('#enabledLabel').text(response ? 'Enabled' : 'Enable');
+            $('#enabledSwitch').attr('checked', response ? 'checked' : null).click(function() {
+                $('#enabledLabel').text($('#enabledLabel').text() == 'Enabled' ? 'Enable' : 'Enabled');
                 backgroundPort.postMessage({cmd: "setEnabledState", data: !response});
-                var enabledSwitchLabel = $('#enabledLabel').text();
-                if (enabledSwitchLabel == 'Enabled') $('#enabledLabel').text('Enable');
-                if (enabledSwitchLabel == 'Enable') $('#enabledLabel').text('Enabled');
             });
 
 
@@ -143,5 +136,17 @@
             }
             
         });
+        // // TODO: refactoring
+        // if (!getEnabledState) {
+        //     return false;
+        // }
+        // // Filter through the entire page first
+        // searchForSpoilers();
+        // checkTitle();
+        
+        // // Check if the current site is Facebook, then apply a filter that watches the mutating page feed if it is
+        // if (window.location.href.indexOf("facebook") > -1) {
+        //     filterFacebook();
+        // }
 	});
 }(window.jQuery));
