@@ -8,7 +8,7 @@
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html",
-    "default_title": "Cloaked"
+    "default_title": "Cloaked: A Destiny 2 Spoiler Blocker"
   },
 
   "permissions": [
@@ -21,7 +21,7 @@
     "matches": ["<all_urls>"]
   }],
 
-  // Used for On/Off button
+  // Persists state for enabled button
   "background": {
     "scripts": ["backgroundEventPage.js"],
     "persistent": false

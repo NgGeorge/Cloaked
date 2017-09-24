@@ -1,11 +1,10 @@
-// This is an event page that persists the on/off state.
+// This is an background (event) page that persists the on/off state.
 var enabledState = true;
 
 chrome.runtime.onConnect.addListener(function (port) {
 	console.assert(port.name == "background");
 	port.onMessage.addListener(function(msg) {
 		if (msg.cmd == "setEnabledState") {
-			// TODO: remove all CSS when turned to false.
 			enabledState = msg.data;
 		} else if (msg.cmd == "getEnabledState") {
 			port.postMessage(enabledState);

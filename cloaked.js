@@ -95,7 +95,8 @@
         $('#enabledSwitch').attr('checked', state ? 'checked' : null).click(function() {
             $('#enabledLabel').text($('#enabledLabel').text() == 'Enabled' ? 'Enable' : 'Enabled');
             port.postMessage({cmd: "setEnabledState", data: !state});
-            // Reload the browser page on click.
+            
+            // Reload the browser page.
             chrome.tabs.reload();
         });
     }
