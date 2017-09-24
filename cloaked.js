@@ -1,7 +1,24 @@
 (function ($) {
 	const SPOILER_LIST = ['destiny', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
-	const FILTER_DELAY = 4; 	// Number of events that can observed before a filter should be applied
+	var obs_count = 0; 				// Number of events observed by an observer
 
+
+	// For Pages with dynamic feeds
+	// Creates an observer, and tells it what to do when it successfully observes mutations
+	// Necessary for Facebooks "neverending" scrolling
+	var createObserver = function(item, filterDelay) {
+		var observer = new MutationObserver(function (mutations, observer) {
+			// fired when a mutation occurs
+			obs_count++;
+			
+			if (obs_count % filterDelay === 0) {
+
+				blockDynamicSpoilers(item);
+			}
+		});
+
+		return observer;
+	}
 
     // Setup an observer for the given target element
 	var setupObserver = function(target, observer) {
@@ -15,38 +32,57 @@
 	var filterFacebook = function() { 
 		// The target elements to watch for mutation
 		var feed = $('[id^=topnews_main_stream_]').get(0);
+		var feedItem = "[id^=hyperfeed_story_id_]";
 		var page = $('[id^=pagelet_timeline]').get(0);
-		var count = 0; 		// Number of events observed by an observer
+		var pageItem = "[class^=_4-u2]";
+		var group = $('[id^=pagelet_group_mall]').get(0);
+		var groupItem = "[class^=_4-u2]";
 
-		// For Facebook Feeds
-		// Creates an observer, and tells it what to do when it successfully observes mutations
-		// Necessary for Facebooks "neverending" scrolling
-		var observer = new MutationObserver(function (mutations, observer) {
-			// fired when a mutation occurs
-			count++;
-			
-			// For user news feed
-			if (feed && (count % FILTER_DELAY === 0)) {
-				blockFacebookSpoilers("[id^=hyperfeed_story_id_]");
-			}
-
-			// For page feeds
-			if (page && (count % FILTER_DELAY === 0)) {
-				blockFacebookSpoilers("[class^=_4-u2]");
-			}
-
-			// Will potentially need to put in a check for _401d feed and _307z posts
-		});
+		// Will potentially need to put in a check for _401d feed and _307z posts
+		
+		var observer;
 		
 		// Setup the observers to observe specific targets
 		if (feed) {
+			observer = createObserver(feedItem, 4);
 			setupObserver(feed, observer);
 		}
 
 		if (page) {
+			obs_count = -8;
+			observer = createObserver(pageItem, 6);
 			setupObserver(page, observer);
 		}
+		
+		if (group) {
+			console.log("TEST");
+			obs_count = -8;
+			observer = createObserver(groupItem, 6);
+			setupObserver(group, observer);
+
+			// Facebook's usage of element classes and IDs are horrifically undecipherable at times. 
+			// This line is necessary to avoid the accidental filtering of the entire news feed for groups pages.
+			$('#contentArea').css('-webkit-filter', '');
+
+		}
 			
+	}
+
+	// Create a filter that watches and dynamically filters Twitter
+	var filterTwitter = function() {
+		// The target elements to watch for mutation
+		var feed = $('[id^=stream-items-id]').get(0);
+		var feedItem = "[id^=stream-item-tweet]";
+
+		var observer;
+		
+		// Setup the observers to observe specific targets
+		if (feed) {
+			observer = createObserver(feedItem, 1);
+			setupObserver(feed, observer);
+		}
+
+
 	}
 
 	// This function applies the censor filters to the page based on the items in the spoiler list.
@@ -61,7 +97,6 @@
 								"p:icontains('" + item + "')", 
 								"h1:icontains('" + item + "')", 
 								"h2:icontains('" + item + "')", 
-								"li:icontains('" + item + "')", 
 								"span:icontains('" + item + "')", 
 								"img[src*='" + item + "']", 
 								"source[src*='" + item + "'], "
@@ -70,13 +105,13 @@
 		searchString = searchString.substring(0, searchString.length - 2);
 
 		// Blur the spoiler's parent (excluding body+head) because it's important to block the spoiler's surrounding terms.
-		$(searchString).parent(":not('body')", ":not('head')").css('-webkit-filter', 'blur(5px)').click(function() {
+		$(searchString).parent(":not('body')", ":not('head')", ":not('ol')").css('-webkit-filter', 'blur(5px)').click(function() {
 			$(this).css('-webkit-filter', '');
 		});
+
 	}
 
-	// searchForSpoilers and blockFacebookSpoilers still need to be refactored into one function
-	var blockFacebookSpoilers = function(blockElement) {
+	var blockDynamicSpoilers = function(blockElement) {
 		if (SPOILER_LIST == null) {
 			return null;
 		}
@@ -86,7 +121,7 @@
 			searchString = searchString + "p:icontains('" + item + "'), span:icontains('" + item + "'), ";
 		});
 		searchString = searchString.substring(0, searchString.length - 2);
-		$(searchString).parents(blockElement).css('-webkit-filter', 'blur(5px)');
+		$(searchString).parents(blockElement, ":not('ol')").css('-webkit-filter', 'blur(5px)');
 	}
 
     // Persists the state of the enable button (even when the popup is closed), and dynamically changes the text when the button is pressed; might use the storage API in the future.
@@ -106,7 +141,7 @@
 		var title = $('title').text().toLowerCase();
 		for (var i = 0; i < SPOILER_LIST.length; i++) {
 			if (title.includes(SPOILER_LIST[i])) {
-				$('img, source').parent(":not('body')", ":not('head')").css('-webkit-filter', 'blur(5px)');
+				$('img, source').parent(":not('body')", ":not('head')", ":not('ol')").css('-webkit-filter', 'blur(5px)');
 				break;
 			}
 		}
@@ -136,7 +171,12 @@
             // Check if the current site is Facebook, then apply a filter that watches the mutating page feed if it is
             if (window.location.href.indexOf("facebook") > -1) {
                 filterFacebook();
+
             }
+
+			if (window.location.href.indexOf("twitter") > -1) {
+				filterTwitter();
+			}
         });
 	});
 }(window.jQuery));
