@@ -2,7 +2,8 @@
 	const SPOILER_LIST = ['destiny', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
 	const FILTER_DELAY = 4; 	// Number of events that can observed before a filter should be applied
 
-	// Setup an observer for the given target element
+
+    // Setup an observer for the given target element
 	var setupObserver = function(target, observer) {
 		observer.observe(target, {
 			subtree: true, // watches target and it's descendants
@@ -88,6 +89,18 @@
 		$(searchString).parents(blockElement).css('-webkit-filter', 'blur(5px)');
 	}
 
+    // Persists the state of the enable button (even when the popup is closed), and dynamically changes the text when the button is pressed; might use the storage API in the future.
+    var setupEnabledSwitch = function(state, port) {
+        $('#enabledLabel').text(state ? 'Enabled' : 'Enable');
+        $('#enabledSwitch').attr('checked', state ? 'checked' : null).click(function() {
+            $('#enabledLabel').text($('#enabledLabel').text() == 'Enabled' ? 'Enable' : 'Enabled');
+            port.postMessage({cmd: "setEnabledState", data: !state});
+            
+            // Reload the browser page.
+            chrome.tabs.reload();
+        });
+    }
+
 	// This function checks if the title includes any of the terms, if it does, then it will block all the images and videos on the page - just incase.
 	checkTitle = function() {
 		var title = $('title').text().toLowerCase();
@@ -107,16 +120,23 @@
 
 	// Run script
 	$(function () {
-
-		// Filter through the entire page first
-		searchForSpoilers();
-		checkTitle();
-		
-		// Check if the current site is Facebook, then apply a filter that watches the mutating page feed if it is
-		if (window.location.href.indexOf("facebook") > -1) {
-			filterFacebook();
-		}
+        // Get the enabled state.
+        var backgroundPort = chrome.runtime.connect({name: "background"});
+        backgroundPort.postMessage({cmd: "getEnabledState"});
+        backgroundPort.onMessage.addListener(function(response) {
+            setupEnabledSwitch(response, backgroundPort);
+            
+            // Only runs the entire extension if "enabledState" returns true
+            if (!response) return;
+            
+            // Filter through the entire page first
+            searchForSpoilers();
+            checkTitle();
+            
+            // Check if the current site is Facebook, then apply a filter that watches the mutating page feed if it is
+            if (window.location.href.indexOf("facebook") > -1) {
+                filterFacebook();
+            }
+        });
 	});
-
 }(window.jQuery));
-
