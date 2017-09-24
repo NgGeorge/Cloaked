@@ -25,5 +25,4 @@
     "scripts": ["backgroundEventPage.js"],
     "persistent": false
   }
-
 }
