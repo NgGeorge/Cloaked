@@ -2,14 +2,6 @@
 	const SPOILER_LIST = ['destiny', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
 	const FILTER_DELAY = 4; 	// Number of events that can observed before a filter should be applied
 
-    var getEnabledState = function() {
-        // TODO: send a message to the event page asking for the state.
-        var enabledPort = chrome.runtime.connect({name: "enabled"});
-        enabledPort.postMessage({cmd: "getEnabledState"});
-        enabledPort.onMessage.addListener(function(msg) {
-            return msg;
-        });
-    }
 
     // Setup an observer for the given target element
 	var setupObserver = function(target, observer) {
@@ -116,21 +108,30 @@
 
 	// Run script
 	$(function () {
-        
-
-        // TODO: setup the channel first.
-        var enabledPort = chrome.runtime.connect({name: "enabled"});
-        enabledPort.postMessage({cmd: "getEnabledState"});
-        enabledPort.onMessage.addListener(function(msg) {
+        // Setup communication with the background page, which persists the enabled state.
+        var backgroundPort = chrome.runtime.connect({name: "enabled"});
+        backgroundPort.postMessage({cmd: "getEnabledState"});
+        backgroundPort.onMessage.addListener(function(response) {
             // Adds logic to on/off button in popup.html
-            $('enabledButton').click(function() {
-                console.log("msg: " + msg);
-                console.log("!msg: " + !msg);
-                enabledPort.postMessage({cmd: "setEnabledState", data: !msg});
+            // TODO: encapsulate this in some modifiable function()
+            if (response == false) {
+                // $('#enabledLabel').text('Enable');
+                $('#enabledSwitch').attr('checked', null);
+            } else {
+                // $('#enabledLabel').text('Enabled');
+                $('#enabledSwitch').attr('checked', 'checked');
+            }
+            $('#enabledSwitch').click(function() {
+                backgroundPort.postMessage({cmd: "setEnabledState", data: !response});
+                var enabledSwitchLabel = $('#enabledLabel').text();
+                if (enabledSwitchLabel == 'Enabled') $('#enabledLabel').text('Enable');
+                if (enabledSwitchLabel == 'Enable') $('#enabledLabel').text('Enabled');
             });
 
 
-            if (msg == true) {
+            // Only runs the entire extension if "isEnabled" returns true
+            if (response == true) {
+
                 // Filter through the entire page first
                 searchForSpoilers();
                 checkTitle();
@@ -140,7 +141,7 @@
                     filterFacebook();
                 }
             }
+            
         });
 	});
-
 }(window.jQuery));
