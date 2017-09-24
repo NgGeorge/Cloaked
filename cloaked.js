@@ -89,6 +89,15 @@
 		$(searchString).parents(blockElement).css('-webkit-filter', 'blur(5px)');
 	}
 
+    // Persists the state of the enable button (even when the popup is closed), and dynamically changes the text when the button is pressed; might use the storage API in the future.
+    var setupEnabledSwitch = function(state, port) {
+        $('#enabledLabel').text(state ? 'Enabled' : 'Enable');
+        $('#enabledSwitch').attr('checked', state ? 'checked' : null).click(function() {
+            $('#enabledLabel').text($('#enabledLabel').text() == 'Enabled' ? 'Enable' : 'Enabled');
+            port.postMessage({cmd: "setEnabledState", data: !state});
+        });
+    }
+
 	// This function checks if the title includes any of the terms, if it does, then it will block all the images and videos on the page - just incase.
 	checkTitle = function() {
 		var title = $('title').text().toLowerCase();
@@ -108,45 +117,23 @@
 
 	// Run script
 	$(function () {
-        // Setup communication with the background page, which persists the enabled state.
-        var backgroundPort = chrome.runtime.connect({name: "enabled"});
-        backgroundPort.postMessage({cmd: "getEnabledState"});
         // Get the enabled state.
+        var backgroundPort = chrome.runtime.connect({name: "background"});
+        backgroundPort.postMessage({cmd: "getEnabledState"});
         backgroundPort.onMessage.addListener(function(response) {
+            setupEnabledSwitch(response, backgroundPort);
             
-
-            $('#enabledLabel').text(response ? 'Enabled' : 'Enable');
-            $('#enabledSwitch').attr('checked', response ? 'checked' : null).click(function() {
-                $('#enabledLabel').text($('#enabledLabel').text() == 'Enabled' ? 'Enable' : 'Enabled');
-                backgroundPort.postMessage({cmd: "setEnabledState", data: !response});
-            });
-
-
             // Only runs the entire extension if "isEnabled" returns true
-            if (response == true) {
-
-                // Filter through the entire page first
-                searchForSpoilers();
-                checkTitle();
-                
-                // Check if the current site is Facebook, then apply a filter that watches the mutating page feed if it is
-                if (window.location.href.indexOf("facebook") > -1) {
-                    filterFacebook();
-                }
-            }
+            if (!response) return;
             
+            // Filter through the entire page first
+            searchForSpoilers();
+            checkTitle();
+            
+            // Check if the current site is Facebook, then apply a filter that watches the mutating page feed if it is
+            if (window.location.href.indexOf("facebook") > -1) {
+                filterFacebook();
+            }
         });
-        // // TODO: refactoring
-        // if (!getEnabledState) {
-        //     return false;
-        // }
-        // // Filter through the entire page first
-        // searchForSpoilers();
-        // checkTitle();
-        
-        // // Check if the current site is Facebook, then apply a filter that watches the mutating page feed if it is
-        // if (window.location.href.indexOf("facebook") > -1) {
-        //     filterFacebook();
-        // }
 	});
 }(window.jQuery));
