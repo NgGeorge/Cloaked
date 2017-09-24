@@ -95,6 +95,8 @@
         $('#enabledSwitch').attr('checked', state ? 'checked' : null).click(function() {
             $('#enabledLabel').text($('#enabledLabel').text() == 'Enabled' ? 'Enable' : 'Enabled');
             port.postMessage({cmd: "setEnabledState", data: !state});
+            // Reload the browser page on click.
+            chrome.tabs.reload();
         });
     }
 
@@ -123,7 +125,7 @@
         backgroundPort.onMessage.addListener(function(response) {
             setupEnabledSwitch(response, backgroundPort);
             
-            // Only runs the entire extension if "isEnabled" returns true
+            // Only runs the entire extension if "enabledState" returns true
             if (!response) return;
             
             // Filter through the entire page first
