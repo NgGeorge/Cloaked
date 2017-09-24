@@ -87,9 +87,8 @@
 
 	// This function applies the censor filters to the page based on the items in the spoiler list.
 	var searchForSpoilers = function() {
-		if (SPOILER_LIST == null) {
-			return null;
-		}
+		if (SPOILER_LIST == null) return;
+
 		var searchString = '';
 		SPOILER_LIST.forEach(function (item) {
 			
@@ -112,9 +111,8 @@
 	}
 
 	var blockDynamicSpoilers = function(blockElement) {
-		if (SPOILER_LIST == null) {
-			return null;
-		}
+		if (SPOILER_LIST == null) return;
+
 		var searchString = '';
 		SPOILER_LIST.forEach(function (item) {
 			
@@ -163,6 +161,8 @@
             
             // Only runs the entire extension if "enabledState" returns true
             if (!response) return;
+
+			if (window.location.href.indexOf("nggeorge.github.io") > 1 | window.location.href.indexOf("NgGeorge/Cloaked") > 1) return;
             
             // Filter through the entire page first
             searchForSpoilers();
