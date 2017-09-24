@@ -1,5 +1,5 @@
 (function ($) {
-	const SPOILER_LIST = ['destiny', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
+	const SPOILER_LIST = ['dota', 'warlock', 'hunter', 'titan', 'destiny2']; // Terms to be filtered on
 	var obs_count = 0; 				// Number of events observed by an observer
 
 
@@ -166,16 +166,15 @@
             
             // Filter through the entire page first
             searchForSpoilers();
-            checkTitle();
             
             // Check if the current site is Facebook, then apply a filter that watches the mutating page feed if it is
             if (window.location.href.indexOf("facebook") > -1) {
                 filterFacebook();
 
-            }
-
-			if (window.location.href.indexOf("twitter") > -1) {
+            } else if (window.location.href.indexOf("twitter") > -1) {
 				filterTwitter();
+			} else {
+            	checkTitle();
 			}
         });
 	});
